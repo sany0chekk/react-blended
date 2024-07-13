@@ -6,20 +6,21 @@ import {
   Section,
 } from 'components';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchByRegion } from 'service/countryApi';
 
 const SearchCountry = () => {
-  const [region, setRegion] = useState('');
   const [countries, setCountries] = useState([]);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const onHandleSubmit = value => {
-    setRegion(value);
-    console.log(value);
+    setSearchParams({query: value});
   };
 
   useEffect(() => {
+    const region = searchParams.get('query');
     if (!region) return;
     setLoading(true);
 
@@ -35,9 +36,7 @@ const SearchCountry = () => {
     };
 
     fetchCountries();
-  }, [region]);
-
-  console.log(countries);
+  }, [searchParams]);
 
   return (
     <Section>
